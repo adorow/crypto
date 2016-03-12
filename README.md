@@ -1,2 +1,2 @@
 # crypto
-Cryptograhpy stuff
+Cryptograhpy things, playing around, and testing stuff.
