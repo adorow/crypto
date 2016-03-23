@@ -1,37 +1,18 @@
 module Cipher.Substitution (
-  SubstitutionCipher
-
+  substitutionCipher,
+  substitutionCipherKeepMissing,
+  substitutionCipherIgnoreMissing
 ) where
-  import Data.Char
 
-  class (Cipher a) => SubstitutionCipher a where
-    lookUp :: a -> a
+  import Data.Maybe
 
-    encrypt m = map lookUp m
+  substitutionCipher :: (Eq a) => (a -> a) -> [a] -> [a]
+  substitutionCipher lookupFunction text = map lookupFunction text
 
-------
+  substitutionCipherKeepMissing :: (Eq a) => (a -> Maybe a) -> [a] -> [a]
+  substitutionCipherKeepMissing lookupFunction text =
+    map (\x -> fromMaybe x . lookupFunction $ x) text
 
-
-  data KeySpace = KeySpace { values :: [Char] } deriving (Show)
-
-
-  reverseKeySpace :: String
-  reverseKeySpace = "zyxwvutsrqponmlkjihgfedcba"
-  identityKeySpace :: String
-  identityKeySpace = "abcdefghijklmnopqrstuvwxyz"
-
-  -- encrypt `text` using the substitution cypher, using `keySpace` as the Key Space
-  -- considers: `keySpace` and `text` contain only english lowercase characters
-  substitutionEncrypt :: String -> String -> String
-  substitutionEncrypt keySpace "" = ""
-  substitutionEncrypt keySpace (char:restOfText) =
-    (lookupIn keySpace char) : (substitutionEncrypt keySpace restOfText)
-
-  lookupIn :: String -> Char -> Char
-  lookupIn keySpace char = keySpace !! (alphabetIndexOf char)
-
-  alphabetIndexOf :: Char -> Int
-  alphabetIndexOf char = (ord char - ord 'a')
-
-  charOfIndex :: Int -> Char
-  charOfIndex i = identityKeySpace !! i
+  substitutionCipherIgnoreMissing :: (Eq a) => (a -> Maybe a) -> [a] -> [a]
+  substitutionCipherIgnoreMissing lookupFunction text =
+    substitutionCipherKeepMissing lookupFunction $ filter (isJust . lookupFunction) text
