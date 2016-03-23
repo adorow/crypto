@@ -2,7 +2,8 @@ module Cipher.Util (
   englishLowercaseAlphabet,
   englishUppercaseAlphabet,
 
-  shiftList
+  shiftListLeft,
+  shiftListRight
 ) where
 
   englishLowercaseAlphabet :: [Char]
@@ -11,5 +12,8 @@ module Cipher.Util (
   englishUppercaseAlphabet :: [Char]
   englishUppercaseAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-  shiftList :: [a] -> Int -> [a]
-  shiftList xs shift = drop shift xs ++ take shift xs
+  shiftListLeft :: [a] -> Int -> [a]
+  shiftListLeft xs shift = drop shift xs ++ take shift xs
+
+  shiftListRight :: [a] -> Int -> [a]
+  shiftListRight xs shift = drop (length xs - shift) xs ++ take (length xs - shift) xs

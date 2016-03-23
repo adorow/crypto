@@ -1,6 +1,8 @@
 module Cipher.Lookup (
   lookupFromZipped,
-  caesarCipherLookup
+
+  caesarCipherLookup,
+  caesarDecipherLookup
 ) where
 
   import Data.List
@@ -10,4 +12,7 @@ module Cipher.Lookup (
   lookupFromZipped zipped = (\x -> lookup x zipped)
 
   caesarCipherLookup :: (Eq a) => [a] -> Int -> (a -> Maybe a)
-  caesarCipherLookup alphabet shift = lookupFromZipped $ zip alphabet $ shiftList alphabet shift
+  caesarCipherLookup alphabet shift = lookupFromZipped $ zip alphabet $ shiftListLeft alphabet shift
+
+  caesarDecipherLookup :: (Eq a) => [a] -> Int -> (a -> Maybe a)
+  caesarDecipherLookup alphabet shift = lookupFromZipped $ zip alphabet $ shiftListRight alphabet shift
